@@ -7,15 +7,15 @@ Installation requirements
 •	If you deploy the on-premises Introspection service, install it on the same cluster, and in the same stepzen namespace, where you install API Connect Essentials.
 
 
-1-  Create new namespace if required:
+# 1-  Create new namespace if required:
 ```yaml
       oc new-project stepzen
 ```     
-2-	Create ibm-entitlement-key 
+# 2-	Create ibm-entitlement-key 
 ```yaml
       kubectl create secret docker-registry ibm-entitlement-key --docker-server=cp.icr.io --docker-username=cp --docker-password=<IBM entitlement key>
 ```
-3-	Install Crunchy Postgres for Kubernetes:
+# 3-	Install Crunchy Postgres for Kubernetes:
       Go to OpenShift operator hub -> search for Postgres -> select "Crunchy Postgres for Kubernetes" -> Install -> choose Installation mode -> click "Install" -> wait till the operator installed ->
       view operatoe -> select "Postgres Cluster" -> click "Create PostgresCluster" ->
       Update the yaml file as below:
@@ -65,13 +65,13 @@ which will yield something similar to:
 ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eb67b48e-d1ef-4cb6-856c-1bb18b5085da)
 
 After the cluster created successfully, you may get the username and password:
-# To retrieve the username:
+#To retrieve the username:
 ```yaml
 kubectl get secret -n stepzen \
   -l postgres-operator.crunchydata.com/pgadmin=stepzen-pgadmin \
   -o jsonpath={.items\[0\].data.username} | base64 -d
 ```  
-# To retrieve the password:
+#To retrieve the password:
 ```yaml
 kubectl get secret -n stepzen \
   -l postgres-operator.crunchydata.com/pgadmin=stepzen-pgadmin \

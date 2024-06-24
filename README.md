@@ -64,6 +64,18 @@ which will yield something similar to:
 
 ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eb67b48e-d1ef-4cb6-856c-1bb18b5085da)
 
-
+After the cluster created successfully, you may get the username and password:
+# To retrieve the username:
+```yaml
+kubectl get secret -n stepzen \
+  -l postgres-operator.crunchydata.com/pgadmin=stepzen-pgadmin \
+  -o jsonpath={.items\[0\].data.username} | base64 -d
+```  
+# To retrieve the password:
+```yaml
+kubectl get secret -n stepzen \
+  -l postgres-operator.crunchydata.com/pgadmin=stepzen-pgadmin \
+  -o jsonpath={.items\[0\].data.password} | base64 -d
+```
 
 

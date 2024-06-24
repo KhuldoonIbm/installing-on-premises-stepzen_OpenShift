@@ -19,31 +19,31 @@ Installation requirements
       
       Change the names and storage size if required as below:
       kind: PostgresCluster
-apiVersion: postgres-operator.crunchydata.com/v1beta1
-metadata:
-  name: example
-  namespace: stepzen
-spec:
-  backups:
-    pgbackrest:
-      repos:
-        - name: repo1
-          volume:
-            volumeClaimSpec:
+      apiVersion: postgres-operator.crunchydata.com/v1beta1
+      metadata:
+        name: example
+        namespace: stepzen
+      spec:
+        backups:
+          pgbackrest:
+            repos:
+              - name: repo1
+                volume:
+                  volumeClaimSpec:
+                    accessModes:
+                      - ReadWriteOnce
+                    resources:
+                      requests:
+                        storage: 1Gi
+        instances:
+          - dataVolumeClaimSpec:
               accessModes:
                 - ReadWriteOnce
               resources:
                 requests:
                   storage: 1Gi
-  instances:
-    - dataVolumeClaimSpec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 1Gi
-      replicas: 1
-  postgresVersion: 15
+            replicas: 1
+        postgresVersion: 15
 
       
 

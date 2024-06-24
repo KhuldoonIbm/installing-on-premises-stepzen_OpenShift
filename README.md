@@ -21,7 +21,7 @@ Installation requirements
       kind: PostgresCluster
       apiVersion: postgres-operator.crunchydata.com/v1beta1
       metadata:
-        name: *stepzen-pg-clus*
+        name: _stepzen-pg-clus_
         namespace: stepzen
       spec:
         backups:

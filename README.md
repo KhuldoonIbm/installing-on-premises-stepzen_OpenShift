@@ -21,3 +21,6 @@ Installation requirements
 
       ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/4fadb58f-4a10-414a-b27f-ed71c978bf59)
 
+      ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eef89088-10f1-47e7-b950-fd73bcfd515a)
+
+

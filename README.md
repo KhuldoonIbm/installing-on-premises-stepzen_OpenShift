@@ -11,8 +11,9 @@ Installation requirements
       oc new-project stepzen
       
 2-	Create ibm-entitlement-key 
+```yaml
       kubectl create secret docker-registry ibm-entitlement-key --docker-server=cp.icr.io --docker-username=cp --docker-password=<IBM entitlement key>
-
+```
 3-	Install Crunchy Postgres for Kubernetes:
       Go to OpenShift operator hub -> search for Postgres -> select "Crunchy Postgres for Kubernetes" -> Install -> choose Installation mode -> click "Install" -> wait till the operator installed ->
       view operatoe -> select "Postgres Cluster" -> click "Create PostgresCluster" ->

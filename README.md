@@ -18,9 +18,8 @@ Installation requirements
       view operatoe -> select "Postgres Cluster" -> click "Create PostgresCluster" 
       
       Change the names and storage size if required as below:
+      
 
-      ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/4fadb58f-4a10-414a-b27f-ed71c978bf59)
-
-      ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eef89088-10f1-47e7-b950-fd73bcfd515a)
+![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eef89088-10f1-47e7-b950-fd73bcfd515a)
 
 

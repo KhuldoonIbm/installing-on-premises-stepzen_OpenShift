@@ -62,9 +62,8 @@ kubectl -n stepzen get svc --selector=postgres-operator.crunchydata.com/cluster=
 ```
 which will yield something similar to:
 
-NAME              TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-hippo-ha          ClusterIP   10.103.73.92   <none>        5432/TCP   3h14m
-hippo-ha-config   ClusterIP   None           <none>        <none>     3h14m
-hippo-pods        ClusterIP   None           <none>        <none>     3h14m
-hippo-primary     ClusterIP   None           <none>        5432/TCP   3h14m
-hippo-replicas    ClusterIP   10.98.110.215  <none>        5432/TCP   3h14m
+![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eb67b48e-d1ef-4cb6-856c-1bb18b5085da)
+
+
+
+

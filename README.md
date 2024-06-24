@@ -45,7 +45,7 @@ Installation requirements
             replicas: 1
         postgresVersion: 15
 
-      
+Example:      
 
 ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eef89088-10f1-47e7-b950-fd73bcfd515a)
 

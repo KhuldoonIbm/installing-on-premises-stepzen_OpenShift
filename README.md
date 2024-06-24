@@ -8,8 +8,9 @@ Installation requirements
 
 
 1-  Create new namespace if required:
+```yaml
       oc new-project stepzen
-      
+```     
 2-	Create ibm-entitlement-key 
 ```yaml
       kubectl create secret docker-registry ibm-entitlement-key --docker-server=cp.icr.io --docker-username=cp --docker-password=<IBM entitlement key>

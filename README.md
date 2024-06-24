@@ -17,7 +17,7 @@ Installation requirements
       Go to OpenShift operator hub -> search for Postgres -> select "Crunchy Postgres for Kubernetes" -> Install -> choose Installation mode -> click "Install" -> wait till the operator installed ->
       view operatoe -> select "Postgres Cluster" -> click "Create PostgresCluster" 
       
-      Change the names and storage size if required as below:
+
       kind: PostgresCluster
       apiVersion: postgres-operator.crunchydata.com/v1beta1
       metadata:

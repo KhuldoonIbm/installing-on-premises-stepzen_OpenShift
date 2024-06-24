@@ -52,4 +52,8 @@ Example:
 
 ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eef89088-10f1-47e7-b950-fd73bcfd515a)
 
+Track the state of the Postgres Pod using the following command:
+```yaml
+kubectl -n stepzen get pods   --selector=postgres-operator.crunchydata.com/cluster=stepzen-pgclus,postgres-operator.crunchydata.com/instance
+```
 

@@ -56,4 +56,15 @@ Track the state of the Postgres Pod using the following command:
 ```yaml
 kubectl -n stepzen get pods   --selector=postgres-operator.crunchydata.com/cluster=stepzen-pgclus,postgres-operator.crunchydata.com/instance
 ```
+To inspect what services are available, you can run the following command:
+```yaml
+kubectl -n stepzen get svc --selector=postgres-operator.crunchydata.com/cluster=stepzen-pgclus
+```
+which will yield something similar to:
 
+NAME              TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+hippo-ha          ClusterIP   10.103.73.92   <none>        5432/TCP   3h14m
+hippo-ha-config   ClusterIP   None           <none>        <none>     3h14m
+hippo-pods        ClusterIP   None           <none>        <none>     3h14m
+hippo-primary     ClusterIP   None           <none>        5432/TCP   3h14m
+hippo-replicas    ClusterIP   10.98.110.215  <none>        5432/TCP   3h14m

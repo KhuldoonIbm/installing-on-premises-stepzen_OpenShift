@@ -5,6 +5,8 @@ Installation requirements
 •	You need an IBM entitlement key for accessing IBM Container Software Library.
 •	A running PostgreSQL DB (version 15 or newer) must be accessible from the cluster.
 •	If you deploy the on-premises Introspection service, install it on the same cluster, and in the same stepzen namespace, where you install API Connect Essentials.
+
+
 1-  Create new namespace if required:
       oc new-project stepzen
       
@@ -14,4 +16,8 @@ Installation requirements
 3-	Install Crunchy Postgres for Kubernetes:
       Go to OpenShift operator hub -> search for Postgres -> select "Crunchy Postgres for Kubernetes" -> Install -> choose Installation mode -> click "Install" -> wait till the operator installed ->
       view operatoe -> select "Postgres Cluster" -> click "Create PostgresCluster" 
-      ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/78ca3af0-800a-4ee7-a7f1-e2df6cf185d7)
+      
+      Change the names and storage size if required as below:
+
+      ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/4fadb58f-4a10-414a-b27f-ed71c978bf59)
+

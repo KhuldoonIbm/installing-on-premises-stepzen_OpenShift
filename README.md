@@ -65,6 +65,10 @@ which will yield something similar to:
 ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eb67b48e-d1ef-4cb6-856c-1bb18b5085da)
 
 After the cluster created successfully, you may get the username and password:
+
+This information is stored in a Secret named with the pattern # <clusterName>-pguser-<userName>
+
+
 #To retrieve the username:
 ```yaml
 kubectl get secret -n stepzen \

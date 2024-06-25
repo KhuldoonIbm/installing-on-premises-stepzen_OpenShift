@@ -122,7 +122,7 @@ The /deploy folder also contains a sample custom resource (CR) file named cr.yam
 
 At minimum, make the following changes to enable installation:
 
-Tip: For information on settings, see CR configuration settings.
+Tip: For information on settings, see CR [configuration settings](https://www.ibm.com/docs/en/SSMNED_ESS_1.x/admin/spec.html).
 + Accept the license agreement.
 > Review the API Connect Essentials License agreement, and then set the key spec.licence.accept to true in the CR file to indicate your agreement.
 

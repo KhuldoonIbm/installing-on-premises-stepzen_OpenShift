@@ -1,5 +1,5 @@
 # API Connect Essentials (StepZen) Installation:
-Installation requirements  
+Installation requirements:  
 1- 	Supported platforms: Red Hat OpenShift Container Platform (OCP) 4.12, or Kubernetes v.126 or v1.27.  
 2- 	Cert-manager must be installed on the cluster, or (OpenShift only) you configured TLS support.  
 3-	You need an IBM entitlement key for accessing IBM Container Software Library.  

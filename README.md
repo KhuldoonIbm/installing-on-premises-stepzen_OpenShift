@@ -154,7 +154,10 @@ spec:
       minReplicas: 1
       maxReplicas: 5
       targetCPUUtilizationPercentage: 80
+  enableLocalhost: true
+  enableProtectNetworkIp: false
 ```
+> [!NOTE] Be sure "enableLocalhost" and "enableProtectNetworkIp" are added to yaml file.
 
 # 8- Configure API Connect Essentials by applying the CR.  
 Apply the CR by running the following command (for OpenShift, replace kubectl with oc):  
@@ -174,4 +177,258 @@ When you run kubectl get pods (or oc get pods), you see three types of pods runn
 
 + stepzen-graph-operator-xxxx: Operator pod managing the service  
 + stepzen-graph-server-xxxx: Graph Server handling single GraphQL requests (queries and mutations)  
-+ stepzen-graph-server-subscription-xxxx: Graph Server handling GraphQL subscriptions (persistent queries)  
++ stepzen-graph-server-subscription-xxxx: Graph Server handling GraphQL subscriptions (persistent queries)
+
+# 9- Setting up a route in OpenShift Container Platform.
+* a- Set up a stepzen-graph-server route for the stepzen account 
+Create a file named stepzen-route.yaml with the following contents (replace my-rosa-cluster.abcd.p1 with your actual cluster domain, and replace cert-manager.io/issuer-name if you intend to use different cluster issuer): 
+
+```yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    cert-manager.io/issuer-kind: ClusterIssuer
+    cert-manager.io/issuer-name: letsencrypt
+    haproxy.router.openshift.io/balance: random
+    haproxy.router.openshift.io/disable_cookies: "true"
+    haproxy.router.openshift.io/hsts_header: max-age=31536000;includeSubDomains;preload
+    haproxy.router.openshift.io/timeout: 30s
+    haproxy.router.openshift.io/timeout-tunnel: 5d
+  name: stepzen-to-graph-server
+spec:
+  host: stepzen.zen.apps.my-rosa-cluster.abcd.p1.openshiftapps.com
+  port:
+    targetPort: stepzen-graph-server
+  tls:
+    haproxy.router.openshift.io/hsts_header: max-age=31536000;includeSubDomains;preload
+    insecureEdgeTerminationPolicy: None
+    termination: edge
+  to:
+    kind: Service
+    name: stepzen-graph-server
+    weight: 200
+  wildcardPolicy: None
+```
+* b- Run the following command to apply the file, which installs the new route into the cluster:
+```yaml  
+oc apply -f stepzen-route.yaml
+```
+* c- Set up stepzen-graph-server and stepzen-graph-server-subscriptions routes for the graphql account.
+  Create a file named graphql-route.yaml with the following contents:
+```yaml 
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    cert-manager.io/issuer-kind: ClusterIssuer
+    cert-manager.io/issuer-name: letsencrypt
+    haproxy.router.openshift.io/balance: random
+    haproxy.router.openshift.io/disable_cookies: "true"
+    haproxy.router.openshift.io/hsts_header: max-age=31536000;includeSubDomains;preload
+    haproxy.router.openshift.io/timeout: 30s
+    haproxy.router.openshift.io/timeout-tunnel: 5d
+  name: graphql-to-graph-server
+spec:
+  host: graphql.zen.apps.my-rosa-cluster.abcd.p1.openshiftapps.com
+  path: /
+  port:
+    targetPort: stepzen-graph-server
+  tls:
+    insecureEdgeTerminationPolicy: None
+    termination: edge
+  to:
+    kind: Service
+    name: stepzen-graph-server
+    weight: 150
+  wildcardPolicy: None
+```
+```yaml   
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    cert-manager.io/issuer-kind: ClusterIssuer
+    cert-manager.io/issuer-name: letsencrypt
+    haproxy.router.openshift.io/balance: random
+    haproxy.router.openshift.io/disable_cookies: "true"
+    haproxy.router.openshift.io/hsts_header: max-age=31536000;includeSubDomains;preload
+    haproxy.router.openshift.io/timeout: 30s
+    haproxy.router.openshift.io/timeout-tunnel: 5d
+  name: graphql-to-graph-server-subscriptions
+spec:
+  host: graphql.zen.apps.my-rosa-cluster.abcd.p1.openshiftapps.com
+  path: /stepzen-subscriptions/
+  port:
+    targetPort: stepzen-graph-server-subscription
+  tls:
+    insecureEdgeTerminationPolicy: None
+    termination: edge
+  to:
+    kind: Service
+    name: stepzen-graph-server-subscription
+    weight: 150
+  wildcardPolicy: None
+---
+```
+* d- Run the following command to apply the file:
+
+```yaml 
+oc apply -f graphql-route.yaml
+```
+# 10- Installing an on-premises Introspection Service (It is mandatory if your cluster doesn't have internet access and optional if it does) 
+* a- In the extracted CASE bundle, locate the file called introspection.yaml.
+  When you installed API Connect Essentials, you extracted the CASE bundle and it created a directory called ibm-stepzen-case. The introspection.yaml file is located in the following subdirectory:
+```yaml 
+  ibm-stepzen-case/inventory/stepzenGraphOperator/files/deploy
+```
+* b- Edit the file and replace the value in the spec.template.spec.imagePullSecrets.name field with the name of your image pull secret: (In our case it is "ibm-entitlement-key")
+```yaml 
+apiVersion: v1
+kind: Service
+metadata:
+  name: introspection-nodeport
+spec:
+  ports:
+  - name: introspection-port
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: introspection
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: introspection
+    name: introspection
+  name: introspection
+spec:
+  minReadySeconds: 1
+  replicas: 1
+  selector:
+    matchLabels:
+      app: introspection
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: introspection
+        name: introspection
+    spec:
+      containers:
+      - args:
+        - --port=8080
+        - --disable-telemetry
+        env:
+        - name: JAVA_TOOL_OPTIONS
+          value: ""
+        - name: JAVA_OPTS
+          value: -XX:+UseParallelGC -XX:MaxRAMPercentage=25.0 -XX:MinRAMPercentage=50.0
+            -XX:InitialRAMPercentage=25.0 -XX:+UseContainerSupport
+        image: cp.icr.io/cp/stepzen/introspection@sha256:6e66ed3096092868ff51036400b3457bcd49cab4d15ef73af8260980b62c93c0
+        livenessProbe:
+          failureThreshold: 4
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          timeoutSeconds: 1
+        name: introspection
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /readyz
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: "1.6"
+            memory: 5Gi
+          requests:
+            cpu: "1.6"
+            memory: 5Gi
+        securityContext:
+          runAsNonRoot: true
+        startupProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          timeoutSeconds: 1
+      imagePullSecrets:
+      - name: ibm-entitlement-key # Please specify the name of a secret containing your ICR entitlement
+      volumes:
+      - configMap:
+          name: introspection
+        name: config-volume
+```    
+
+* c- Set up a route for the Introspection Service:
+
+c_1: Create a file named introspection-route.yaml with the following contents (replace my-rosa-cluster.abcd.p1 with your actual cluster domain, and replace cert-manager.io/issuer-name if you intend to use different cluster issuer): 
+```yaml 
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    cert-manager.io/issuer-kind: ClusterIssuer
+    cert-manager.io/issuer-name: letsencrypt
+    haproxy.router.openshift.io/balance: random
+    haproxy.router.openshift.io/disable_cookies: "true"
+    haproxy.router.openshift.io/hsts_header: max-age=31536000;includeSubDomains;preload
+    haproxy.router.openshift.io/timeout: 30s
+    haproxy.router.openshift.io/timeout-tunnel: 5d
+  name: introspection-route
+spec:
+  host: stepzen-introspection.apps.my-rosa-cluster.abcd.p1.openshiftapps.com
+  port:
+    targetPort: introspection-port
+  tls:
+    insecureEdgeTerminationPolicy: None
+    termination: edge
+  to:
+    kind: Service
+    name: stepzen-introspection
+    weight: 150
+  wildcardPolicy: None
+```
+
+c_2: :Run the following command to apply the file, which installs the new route into the cluster: 
+```yaml 
+oc apply -f introspection-route.yaml
+```
+# 10- Login to StepZen:
+* a- get your API key or API admin by rinning:
+  Go to the CASE bundle folder under ibm-stepzen-case/inventory/stepzenGraphOperator/files/deploy then run below command:
+  To get API Key: 
+```yaml 
+   ./stepzen-admin.sh get-apikey
+```
+  To get API admin key: 
+```yaml 
+   ./stepzen-admin.sh get-adminkey
+```
+Example 1: without mentioning introspection service: (By default, API Connect Essentials uses a public introspection service)
+```yaml 
+stepzen login apps.my-rosa-cluster.abcd.p1.openshiftapps.com -a graphql -k graphql::local.io+1001::2080e2e0a4cc7c16b3155cf63dec4853d32e3812d9b637dc77
+```
+Example 2: Mentioning introspection service: (Mandatory if your cluster doesn't have internet access) 
+```yaml 
+stepzen login apps.my-rosa-cluster.abcd.p1.openshiftapps.com -a graphql -k graphql::local.io+1001::2080e2e0a4cc7c16b3155cf63dec4853d32e3812d9b637dc77 --introspection stepzen-introspection.apps.my-rosa-cluster.abcd.p1.openshiftapps.com
+```

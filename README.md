@@ -378,10 +378,14 @@ spec:
           name: introspection
         name: config-volume
 ```    
+* c- Run the following command to apply the file:
 
-* c- Set up a route for the Introspection Service:
+```yaml 
+oc apply -f introspection.yaml
+```
+* d- Set up a route for the Introspection Service:
 
-c_1: Create a file named introspection-route.yaml with the following contents (replace my-rosa-cluster.abcd.p1 with your actual cluster domain, and replace cert-manager.io/issuer-name if you intend to use different cluster issuer): 
+d_1: Create a file named introspection-route.yaml with the following contents (replace my-rosa-cluster.abcd.p1 with your actual cluster domain, and replace cert-manager.io/issuer-name if you intend to use different cluster issuer): 
 ```yaml 
 apiVersion: route.openshift.io/v1
 kind: Route
@@ -409,7 +413,7 @@ spec:
   wildcardPolicy: None
 ```
 
-c_2: :Run the following command to apply the file, which installs the new route into the cluster: 
+d_2: :Run the following command to apply the file, which installs the new route into the cluster: 
 ```yaml 
 oc apply -f introspection-route.yaml
 ```
@@ -424,11 +428,11 @@ oc apply -f introspection-route.yaml
 ```yaml 
    ./stepzen-admin.sh get-adminkey
 ```
-Example 1: without mentioning introspection service: (By default, API Connect Essentials uses a public introspection service)
+Example 1: login without mentioning introspection service: (By default, API Connect Essentials uses a public introspection service)
 ```yaml 
 stepzen login apps.my-rosa-cluster.abcd.p1.openshiftapps.com -a graphql -k graphql::local.io+1001::2080e2e0a4cc7c16b3155cf63dec4853d32e3812d9b637dc77
 ```
-Example 2: Mentioning introspection service: (Mandatory if your cluster doesn't have internet access) 
+Example 2: login by mentioning introspection service: (Mandatory if your cluster doesn't have internet access) 
 ```yaml 
 stepzen login apps.my-rosa-cluster.abcd.p1.openshiftapps.com -a graphql -k graphql::local.io+1001::2080e2e0a4cc7c16b3155cf63dec4853d32e3812d9b637dc77 --introspection stepzen-introspection.apps.my-rosa-cluster.abcd.p1.openshiftapps.com
 ```

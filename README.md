@@ -417,14 +417,14 @@ d_2: :Run the following command to apply the file, which installs the new route 
 ```yaml 
 oc apply -f introspection-route.yaml
 ```
-# 10- Login to StepZen:
-* a- get your API key or API admin by rinning:
-  Go to the CASE bundle folder under ibm-stepzen-case/inventory/stepzenGraphOperator/files/deploy then run below command:
+# 11- Login to StepZen:
+* a- get your API key or API admin by rinning: 
+  Go to the CASE bundle folder under ibm-stepzen-case/inventory/stepzenGraphOperator/files/deploy then run below command: 
   To get API Key: 
 ```yaml 
-   ./stepzen-admin.sh get-apikey
+   ./stepzen-admin.sh get-apikey 
 ```
-  To get API admin key: 
+  To get API admin key:  
 ```yaml 
    ./stepzen-admin.sh get-adminkey
 ```

@@ -64,6 +64,7 @@ which will yield something similar to:
 
 ![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/eb67b48e-d1ef-4cb6-856c-1bb18b5085da)
 
+
 After the Postgres cluster is initialized, PGO will bootstrap a database and create a Postgres user that your application can use to access the database
 
 > This information is stored in a Secret named with the pattern: 'clusterName'-pguser-'userName'
@@ -88,15 +89,16 @@ a- Navigate to the ibm-stepzen-case folder at GitHub.com:
 > https://github.com/IBM/cloud-pak/tree/master/repo/case/ibm-stepzen-case  
 
 b- Open the subfolder that represents the newest version of the CASE bundle. The subfolders are named with <version+timestamp>; for example:
-> cloud-pak/repo/case/ibm-stepzen-case/1.0.0+20230925.000000  
+> repo/case/ibm-stepzen-case/1.0.0+20240417.000000
 
 c- Download the newest CASE bundle to the local directory.
 CASE bundles are named ibm-stepzen-case-<version+timestamp>.tgz; for example:  
 
-> ibm-stepzen-case-1.0.0+20230925.000000.tgz  
+> ibm-stepzen-case-1.0.0+20240417.000000.tgz  
 
 Download the CASE bundle by clicking the Download icon as shown in the following image:  
-![image](https://github.com/KhuldoonIbm/stepzen/assets/108668456/03882803-4285-452b-a022-388af97f8e13)  
+ ![image](https://github.com/user-attachments/assets/39391f76-0858-4fec-9ef3-469ff3547b67)
+
 
 d- Extract the CASE bundle by running the following command:  
 > tar zxvf ibm-stepzen-case-<version+timestamp>.tgz  
